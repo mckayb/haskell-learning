@@ -1,1 +1,1 @@
-# haskell-learn
+# haskell-learning
