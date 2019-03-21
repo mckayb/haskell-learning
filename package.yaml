@@ -1,0 +1,50 @@
+name:                haskell-learn
+version:             0.1.0.0
+github:              "mckayb/haskell-learn"
+license:             BSD3
+author:              "McKay Broderick"
+maintainer:          "mckay.db@gmail.com"
+copyright:           "2017"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/mckayb/haskell-learn#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- vector
+- matrix
+
+library:
+  source-dirs: src
+
+executables:
+  haskell-learn-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - haskell-learn
+
+tests:
+  haskell-learn-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - haskell-learn
