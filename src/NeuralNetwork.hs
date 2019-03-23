@@ -3,7 +3,6 @@ module NeuralNetwork where
 import Prelude
 import Data.Vector (Vector)
 import Data.Matrix (Matrix)
-import qualified Data.Foldable as F
 import qualified Data.Vector as V
 import qualified Data.Matrix as M
 
@@ -41,7 +40,7 @@ neuralNetwork :: Matrix Double
 neuralNetwork = think input trained
   where
     input = M.rowVector $ V.fromList [1, 0, 0]
-    trained = train inputs outputs 15000 
+    trained = train inputs outputs 15000
 
 initialWeights :: Matrix Double
 initialWeights = M.fromLists [ [-0.16595599]
