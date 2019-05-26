@@ -1,0 +1,1 @@
+-c "stack ghci haskell-learn:lib"

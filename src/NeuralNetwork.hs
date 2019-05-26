@@ -5,6 +5,7 @@ import Data.Vector (Vector)
 import Data.Matrix (Matrix)
 import qualified Data.Vector as V
 import qualified Data.Matrix as M
+import qualified System.Random as R
 
 sigmoid :: (Num a, Fractional a, Floating a) => a -> a
 sigmoid x = 1 / (1 + exp (-x))
@@ -12,41 +13,21 @@ sigmoid x = 1 / (1 + exp (-x))
 sigmoid' :: Num a => a -> a
 sigmoid' x = x * (1 - x)
 
-train :: Matrix Double -> Matrix Double -> Integer -> Matrix Double
-train inputs outputs iterations = foldr go initialWeights [1..iterations]
+train :: Integer -> Matrix Double -> Matrix Double -> IO (Matrix Double)
+train iterations inputs outputs = do
+  initialWeights' <- V.generateM (M.nrows inputs - 1) (const (R.randomRIO (-1, 1) :: IO Double))
+  pure $ foldr go (M.colVector initialWeights') [1..iterations]
   where
     go :: Integer -> Matrix Double -> Matrix Double
     go _ weights =
-      let newOutput = think inputs weights
+      let newOutput = think weights inputs
           error = outputs - newOutput
           changes = sigmoid' <$> newOutput
           adjustments = M.multStd (M.transpose inputs) (M.multStd error (M.transpose changes))
        in weights + adjustments
 
 think :: Matrix Double -> Matrix Double -> Matrix Double
-think inputs weights = sigmoid <$> M.multStd inputs weights
+think weights inputs = sigmoid <$> M.multStd inputs weights
 
-inputs :: Matrix Double
-inputs = M.fromLists [ [0, 0, 1]
-                     , [1, 1, 1]
-                     , [1, 0, 1]
-                     , [0, 1, 1]
-                     ]
-
-outputs :: Matrix Double
-outputs = M.colVector $ V.fromList [0, 1, 1, 0]
-
-neuralNetwork :: Matrix Double
-neuralNetwork = think input trained
-  where
-    input = M.rowVector $ V.fromList [1, 0, 0]
-    trained = train inputs outputs 15000
-
-initialWeights :: Matrix Double
-initialWeights = M.fromLists [ [-0.16595599]
-                             , [0.44064899]
-                             , [-0.99977125]
-                             ]
-
-
-
+predict :: Matrix Double -> Matrix Double -> Matrix Double
+predict = think
