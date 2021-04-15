@@ -24,6 +24,9 @@ dependencies:
 - vector
 - matrix
 - random
+- cassava
+- bytestring
+- utf8-string
 
 library:
   source-dirs: src
